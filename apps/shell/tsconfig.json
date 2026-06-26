@@ -5,13 +5,13 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
-    "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    "skipLibCheck": true,
     "paths": {
-      "@ops/ui/*": ["./src/*"]
+      "@ops/ui/*": ["../../packages/ui/src/*"]
     }
   },
-  "include": ["."],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }

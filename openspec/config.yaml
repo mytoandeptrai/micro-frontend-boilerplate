@@ -1,0 +1,80 @@
+schema: spec-driven
+
+# Context được hiển thị cho AI khi tạo artifacts.
+# Viết bằng tiếng Việt, giữ nguyên IT terms.
+context: |
+  ## Dự án
+  Internal Ops Dashboard — kiến trúc micro-frontend cho team dev/ops nội bộ.
+  Gồm 3 khu vực chức năng: Team Management, Monitoring, Settings.
+  Mỗi khu vực là một remote app riêng biệt, build và deploy độc lập.
+  Project root: ops-dashboard (đang được rename từ micro-frontend).
+
+  ## Monorepo structure
+  Monorepo tool: pnpm workspaces + Turborepo
+
+  apps/
+    shell/          — HOST app (port 3000): điều phối routing, auth state, shared providers
+    team-app/       — REMOTE 1 (port 3001): quản lý members và roles
+    monitor-app/    — REMOTE 2 (port 3002): dashboard stats và activity log
+    settings-app/   — REMOTE 3 (port 3003): workspace settings và theme
+    api/            — NestJS backend: REST API, PostgreSQL + Redis
+
+  packages/
+    ui/             — @ops/ui: shadcn/ui components + Tailwind preset dùng chung
+    shared/         — @ops/shared: event-bus, Zustand global store, shared types/constants
+
+  ## Tech stack
+  Build tool:       Rsbuild (@rsbuild/core) — powered by Rspack, KHÔNG phải Vite
+  Module Fed:       @module-federation/rsbuild-plugin + @module-federation/enhanced
+  Framework:        React 19
+  Language:         TypeScript — strict mode bật cho toàn bộ packages
+  Styling:          TailwindCSS v4 — mỗi app có config riêng nhưng extend từ @ops/ui/tailwind.preset
+  Components:       shadcn/ui (qua @ops/ui)
+  Data fetching:    TanStack Query v5 — QueryClient khởi tạo ở shell, remote apps dùng chung qua React Context
+  Global state:     Zustand — singleton store cho user, theme, locale
+  Routing:          React Router v6
+  Backend:          NestJS + TypeORM + PostgreSQL + Redis
+
+  ## Module Federation rules
+  - Shell (host): expose ./store và ./ui, set eager: true cho React vì shell render đầu tiên
+  - Remote apps: expose ./App, KHÔNG set eager — để MF negotiate shared deps từ shell
+  - Bootstrap pattern bắt buộc ở tất cả apps: index.tsx chỉ chứa dynamic import('./bootstrap')
+    Lý do: MF cần negotiate shared deps TRƯỚC KHI app code chạy. Nếu import React synchronous
+    ở top-level, React load trước khi MF negotiate → shared scope chưa sẵn sàng → load 2 lần.
+  - Shared deps phải config singleton: true ở tất cả apps: react, react-dom, react-router-dom,
+    @tanstack/react-query, zustand
+  - Remote apps KHÔNG import trực tiếp từ remote app khác
+    Giao tiếp cross-remote chỉ qua: event-bus (@ops/shared) hoặc Zustand store (@ops/shared)
+
+  ## Testing strategy
+  - Unit test — pure functions:       Jest + ts-jest
+  - Unit test — React components:     Jest + React Testing Library + userEvent
+  - E2E — happy paths trên browser:   Playwright
+  - Tests được implement trong cùng task với feature, không tách thành task riêng
+
+  ## Conventions
+  - Commit message: Conventional Commits (feat:, fix:, chore:, refactor:, test:, docs:)
+  - Branch naming:  feat/mô-tả-ngắn-gọn (ví dụ: feat/shell-layout, feat/mf-bootstrap-pattern)
+  - Code style:     match pattern hiện có trong repo, không refactor code ngoài scope của task
+
+# Quy tắc per-artifact — áp dụng khi AI tạo proposal, tasks, spec
+rules:
+  proposal:
+    - Viết bằng tiếng Việt, giữ nguyên IT terms (component, store, singleton, event bus...)
+    - Phải liệt kê rõ apps và packages bị ảnh hưởng
+    - Phải có section "Non-goals" để tránh scope creep
+    - Phải giải thích lý do kỹ thuật — vì sao config như vậy, không chỉ nêu cái gì
+
+  tasks:
+    - Viết bằng tiếng Việt, giữ nguyên IT terms
+    - Thứ tự bắt buộc trong mỗi phase: infra/setup → backend (apps/api) → frontend (apps/shell, remote apps)
+    - Backend phải hoàn thành trước khi bắt đầu frontend task tương ứng
+    - Mỗi task phải nhỏ và verifiable độc lập — phải có tiêu chí "done" rõ ràng
+    - Tests (unit/integration/E2E tùy loại) phải nằm trong cùng task với feature tương ứng
+    - Ghi rõ file paths và package liên quan trong mỗi task
+
+  spec:
+    - Viết bằng tiếng Việt, giữ nguyên IT terms
+    - Nếu task thay đổi TypeORM entity, phải có migration plan kèm theo
+    - Nếu task thay đổi Module Federation config (exposes/remotes/shared), phải note rõ
+      impact lên tất cả apps liên quan trong monorepo

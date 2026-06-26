@@ -16,3 +16,8 @@ todos.json
 
 # typescript
 *.tsbuildinfo
+requirement.md
+
+# playwright
+test-results/
+playwright-report/
