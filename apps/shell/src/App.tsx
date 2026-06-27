@@ -5,7 +5,8 @@ import Sidebar from "./layout/Sidebar";
 import DashboardPage from "./pages/DashboardPage";
 import MonitorPage from "./pages/MonitorPage";
 import SettingsPage from "./pages/SettingsPage";
-import TeamPage from "./pages/TeamPage";
+
+const TeamApp = React.lazy(() => import("teamApp/App"));
 
 export default function App() {
   return (
@@ -18,7 +19,7 @@ export default function App() {
             <Suspense fallback={<div className="p-6">Loading...</div>}>
               <Routes>
                 <Route path="/" element={<DashboardPage />} />
-                <Route path="/team" element={<TeamPage />} />
+                <Route path="/team/*" element={<TeamApp />} />
                 <Route path="/monitor" element={<MonitorPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
               </Routes>

@@ -21,3 +21,6 @@ requirement.md
 # playwright
 test-results/
 playwright-report/
+
+# Module Federation generated types
+@mf-types/

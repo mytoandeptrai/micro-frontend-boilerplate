@@ -7,7 +7,9 @@ export default defineConfig({
     pluginReact(),
     pluginModuleFederation({
       name: "shell",
-      remotes: {},
+      remotes: {
+        teamApp: "teamApp@http://localhost:3001/mf-manifest.json",
+      },
       shared: {
         react: { singleton: true, eager: true },
         "react-dom": { singleton: true, eager: true },
@@ -15,8 +17,14 @@ export default defineConfig({
         "@tanstack/react-query": { singleton: true },
         zustand: { singleton: true },
       },
+      dts: {
+        consumeTypes: true,
+      },
     }),
   ],
+  output: {
+    assetPrefix: "/",
+  },
   html: {
     template: "./public/index.html",
   },
@@ -27,5 +35,12 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    historyApiFallback: true,
+    proxy: {
+      "/api": {
+        target: "http://localhost:4000",
+        changeOrigin: true,
+      },
+    },
   },
 });

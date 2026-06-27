@@ -1,13 +1,11 @@
 import dataSource from '../data-source';
+import { seedMembers } from './member.seed';
 
 async function runSeed() {
   await dataSource.initialize();
   console.log('Data source initialized. Running seeds...');
 
-  // Add seed logic here
-  // Example:
-  // const userRepo = dataSource.getRepository(User);
-  // await userRepo.save([...]);
+  await seedMembers(dataSource);
 
   console.log('Seeding complete.');
   await dataSource.destroy();

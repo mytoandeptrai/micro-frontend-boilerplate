@@ -8,7 +8,8 @@ import redisConfig from '@/config/redis.config';
 import { SharedRedisModule } from '@/shared/redis/shared-redis.module';
 import { CachingModule } from '@/shared/caching/caching.module';
 import { LoggingMiddleware } from '@/shared/middleware/logging.middleware';
-import { UsersModule } from '@/users/users.module';
+import { MembersModule } from '@/modules/members/members.module';
+import { UsersModule } from '@/modules/users/users.module';
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ import { UsersModule } from '@/users/users.module';
         database: configService.get<string>('database.database'),
         schema: configService.get<string>('database.schema'),
         autoLoadEntities: true,
-        migrations: [__dirname + '/database/migrations/*{.ts,.js}'],
+        migrations: [__dirname + '/shared/database/migrations/*{.ts,.js}'],
         synchronize: configService.get<boolean>('database.synchronize', false),
         logging: configService.get<boolean>('database.logging', false),
         ssl: process.env.NODE_ENV === 'production' ? true : false,
@@ -49,6 +50,7 @@ import { UsersModule } from '@/users/users.module';
 
     // Features Modules
     UsersModule,
+    MembersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
