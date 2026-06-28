@@ -1,11 +1,11 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom"
 
 const links = [
   { to: "/", label: "Dashboard", end: true },
   { to: "/team", label: "Team" },
   { to: "/monitor", label: "Monitor" },
   { to: "/settings", label: "Settings" },
-];
+]
 
 export default function Sidebar() {
   return (
@@ -27,5 +27,5 @@ export default function Sidebar() {
         </NavLink>
       ))}
     </nav>
-  );
+  )
 }

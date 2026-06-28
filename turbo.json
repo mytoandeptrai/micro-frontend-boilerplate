@@ -8,16 +8,20 @@
       "outputs": ["dist/**"]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "cache": false
     },
     "format": {
-      "dependsOn": ["^format"]
+      "cache": false
     },
     "typecheck": {
       "dependsOn": ["^typecheck"]
     },
     "test:e2e": {
       "cache": false
+    },
+    "start": {
+      "cache": false,
+      "persistent": true
     },
     "dev": {
       "cache": false,

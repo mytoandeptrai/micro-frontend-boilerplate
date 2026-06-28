@@ -9,5 +9,5 @@ export default function Header() {
         <span className="text-sm text-muted-foreground">User</span>
       </div>
     </header>
-  );
+  )
 }

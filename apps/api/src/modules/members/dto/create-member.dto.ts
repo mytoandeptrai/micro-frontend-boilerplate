@@ -1,23 +1,29 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
-import { MemberRole } from '../member.entity';
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from "class-validator"
+import { MemberRole } from "../member.entity"
 
 export class CreateMemberDto {
-  @ApiProperty({ example: 'Alice Johnson' })
+  @ApiProperty({ example: "Alice Johnson" })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name: string
 
-  @ApiProperty({ example: 'alice@ops.dev' })
+  @ApiProperty({ example: "alice@ops.dev" })
   @IsEmail()
-  email: string;
+  email: string
 
   @ApiProperty({ enum: MemberRole, example: MemberRole.MEMBER })
   @IsEnum(MemberRole)
-  role: MemberRole;
+  role: MemberRole
 
-  @ApiPropertyOptional({ example: 'https://i.pravatar.cc/150?u=alice' })
+  @ApiPropertyOptional({ example: "https://i.pravatar.cc/150?u=alice" })
   @IsOptional()
   @IsString()
-  avatar?: string;
+  avatar?: string
 }

@@ -1,10 +1,10 @@
 {
   "latestErrorEvent": {
     "code": "TYPE-001",
-    "message": "Failed to generate type declaration. Execute the below cmd to reproduce and fix the error. #TYPE-001\nargs: {\"cmd\":\"npx tsc --project /Users/macbookpro/Desktop/Projects/micro-frontend/apps/team-app/node_modules/.federation/tsconfig.7cc7f4a061ad3a3bc35bd139ddbe2787.json\"}\nView the docs to see how to solve: https://module-federation.io/guide/troubleshooting/type#type-001",
+    "message": "Failed to generate type declaration. Execute the below cmd to reproduce and fix the error. #TYPE-001\nargs: {\"cmd\":\"npx tsc --project /Users/macbookpro/Desktop/Projects/micro-frontend/apps/team-app/node_modules/.federation/tsconfig.edfdfd151054673303a52e82d9da848d.json\"}\nView the docs to see how to solve: https://module-federation.io/guide/troubleshooting/type#type-001",
     "args": {
-      "cmd": "npx tsc --project /Users/macbookpro/Desktop/Projects/micro-frontend/apps/team-app/node_modules/.federation/tsconfig.7cc7f4a061ad3a3bc35bd139ddbe2787.json"
+      "cmd": "npx tsc --project /Users/macbookpro/Desktop/Projects/micro-frontend/apps/team-app/node_modules/.federation/tsconfig.edfdfd151054673303a52e82d9da848d.json"
     },
-    "timestamp": 1782545678382
+    "timestamp": 1782549773593
   }
 }

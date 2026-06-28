@@ -1,5 +1,5 @@
-import { Badge } from "@ops/ui/components/badge";
-import { Button } from "@ops/ui/components/button";
+import { Badge } from "@ops/ui/components/badge"
+import { Button } from "@ops/ui/components/button"
 import {
   Form,
   FormControl,
@@ -7,55 +7,62 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@ops/ui/components/form";
-import { Input } from "@ops/ui/components/input";
+} from "@ops/ui/components/form"
+import { Input } from "@ops/ui/components/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@ops/ui/components/select";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
-import { z } from "zod";
-import { useMember } from "../hooks/useMember";
-import { useUpdateMember } from "../hooks/useMemberMutations";
+} from "@ops/ui/components/select"
+import { zodResolver } from "@hookform/resolvers/zod"
+import React, { useState } from "react"
+import { useForm } from "react-hook-form"
+import { useNavigate, useParams } from "react-router-dom"
+import { z } from "zod"
+import { useMember } from "../hooks/useMember"
+import { useUpdateMember } from "../hooks/useMemberMutations"
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email"),
   role: z.enum(["admin", "member", "viewer"]),
   avatar: z.string().optional(),
-});
+})
 
-type FormValues = z.infer<typeof schema>;
+type FormValues = z.infer<typeof schema>
 
 export default function MemberDetail() {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const { data: member, isLoading } = useMember(id);
-  const updateMutation = useUpdateMember(id!);
-  const [isEditing, setIsEditing] = useState(false);
+  const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
+  const { data: member, isLoading } = useMember(id)
+  const updateMutation = useUpdateMember(id!)
+  const [isEditing, setIsEditing] = useState(false)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     values: member
-      ? { name: member.name, email: member.email, role: member.role, avatar: member.avatar ?? "" }
+      ? {
+          name: member.name,
+          email: member.email,
+          role: member.role,
+          avatar: member.avatar ?? "",
+        }
       : undefined,
-  });
+  })
 
-  if (isLoading) return <div className="p-6 text-sm text-muted-foreground">Loading...</div>;
-  if (!member) return <div className="p-6 text-sm text-destructive">Member not found</div>;
+  if (isLoading)
+    return <div className="p-6 text-sm text-muted-foreground">Loading...</div>
+  if (!member)
+    return <div className="p-6 text-sm text-destructive">Member not found</div>
 
   async function onSubmit(values: FormValues) {
     await updateMutation.mutateAsync({
       ...values,
       avatar: values.avatar || undefined,
-    });
-    setIsEditing(false);
+    })
+    setIsEditing(false)
   }
 
   return (
@@ -142,8 +149,8 @@ export default function MemberDetail() {
                 type="button"
                 variant="outline"
                 onClick={() => {
-                  form.reset();
-                  setIsEditing(false);
+                  form.reset()
+                  setIsEditing(false)
                 }}
               >
                 Cancel
@@ -155,7 +162,11 @@ export default function MemberDetail() {
         <div className="space-y-4">
           <div className="flex items-start gap-4">
             {member.avatar ? (
-              <img src={member.avatar} alt={member.name} className="size-16 rounded-full" />
+              <img
+                src={member.avatar}
+                alt={member.name}
+                className="size-16 rounded-full"
+              />
             ) : (
               <div className="size-16 rounded-full bg-muted flex items-center justify-center text-lg">
                 {member.name[0]}
@@ -163,12 +174,18 @@ export default function MemberDetail() {
             )}
             <div className="space-y-1">
               <div className="font-heading font-semibold">{member.name}</div>
-              <div className="text-sm text-muted-foreground">{member.email}</div>
+              <div className="text-sm text-muted-foreground">
+                {member.email}
+              </div>
               <div className="flex gap-2">
-                <Badge variant={member.role === "admin" ? "default" : "outline"}>
+                <Badge
+                  variant={member.role === "admin" ? "default" : "outline"}
+                >
                   {member.role}
                 </Badge>
-                <Badge variant={member.status === "active" ? "default" : "secondary"}>
+                <Badge
+                  variant={member.status === "active" ? "default" : "secondary"}
+                >
                   {member.status}
                 </Badge>
               </div>
@@ -181,5 +198,5 @@ export default function MemberDetail() {
         </div>
       )}
     </div>
-  );
+  )
 }

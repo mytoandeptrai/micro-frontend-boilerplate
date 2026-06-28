@@ -8,7 +8,7 @@ import {
   type FieldPath,
   type FieldValues,
 } from "react-hook-form"
-import { Label as LabelPrimitive } from "radix-ui"
+import type { Label as LabelPrimitive } from "radix-ui"
 
 import { cn } from "@ops/ui/lib/utils"
 import { Label } from "@ops/ui/components/label"
@@ -23,7 +23,7 @@ type FormFieldContextValue<
 }
 
 const FormFieldContext = React.createContext<FormFieldContextValue>(
-  {} as FormFieldContextValue
+  {} as FormFieldContextValue,
 )
 
 function FormField<
@@ -65,7 +65,7 @@ type FormItemContextValue = {
 }
 
 const FormItemContext = React.createContext<FormItemContextValue>(
-  {} as FormItemContextValue
+  {} as FormItemContextValue,
 )
 
 function FormItem({ className, ...props }: React.ComponentProps<"div">) {
@@ -99,7 +99,9 @@ function FormLabel({
   )
 }
 
-function FormControl({ ...props }: React.ComponentProps<typeof React.Fragment>) {
+function FormControl({
+  ...props
+}: React.ComponentProps<typeof React.Fragment>) {
   const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
 
   return (
@@ -113,7 +115,7 @@ function FormControl({ ...props }: React.ComponentProps<typeof React.Fragment>) 
                 ? `${formDescriptionId}`
                 : `${formDescriptionId} ${formMessageId}`,
               "aria-invalid": !!error,
-            }
+            },
           )
         : props.children}
     </React.Fragment>

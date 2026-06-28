@@ -1,11 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable, Logger } from "@nestjs/common"
+import { ConfigService } from "@nestjs/config"
 import {
   RedisModuleOptions,
   RedisOptionsFactory,
-} from '@liaoliaots/nestjs-redis';
+} from "@liaoliaots/nestjs-redis"
 
-const logger = new Logger('RedisModule');
+const logger = new Logger("RedisModule")
 
 @Injectable()
 export class RedisConfigService implements RedisOptionsFactory {
@@ -14,15 +14,15 @@ export class RedisConfigService implements RedisOptionsFactory {
   createRedisOptions(): RedisModuleOptions {
     return {
       config: {
-        host: this.configService.get<string>('redis.host'),
-        port: this.configService.get<number>('redis.port'),
-        password: this.configService.get<string>('redis.password') || undefined,
-        db: this.configService.get<number>('redis.db'),
+        host: this.configService.get<string>("redis.host"),
+        port: this.configService.get<number>("redis.port"),
+        password: this.configService.get<string>("redis.password") || undefined,
+        db: this.configService.get<number>("redis.db"),
         onClientCreated(client) {
-          client.on('ready', () => logger.log('Redis connected'));
-          client.on('error', (err) => logger.error('Redis error', err));
+          client.on("ready", () => logger.log("Redis connected"))
+          client.on("error", (err) => logger.error("Redis error", err))
         },
       },
-    };
+    }
   }
 }

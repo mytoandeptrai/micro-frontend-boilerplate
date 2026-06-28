@@ -6,6 +6,7 @@
     "dev": "rsbuild dev --port 3000",
     "build": "rsbuild build",
     "preview": "rsbuild preview",
+    "start": "rsbuild preview --port 3000",
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test"
   },
@@ -21,6 +22,7 @@
     "zustand": "^5.0.5"
   },
   "devDependencies": {
+    "@ops/shared-config": "workspace:*",
     "@module-federation/enhanced": "^2.6.0",
     "@module-federation/rsbuild-plugin": "^2.6.0",
     "@rsbuild/core": "^1.4.3",

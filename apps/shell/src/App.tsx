@@ -1,12 +1,12 @@
-import React, { Suspense } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Header from "./layout/Header";
-import Sidebar from "./layout/Sidebar";
-import DashboardPage from "./pages/DashboardPage";
-import MonitorPage from "./pages/MonitorPage";
-import SettingsPage from "./pages/SettingsPage";
+import React, { Suspense } from "react"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import Header from "./layout/Header"
+import Sidebar from "./layout/Sidebar"
+import DashboardPage from "./pages/DashboardPage"
+import MonitorPage from "./pages/MonitorPage"
+import SettingsPage from "./pages/SettingsPage"
 
-const TeamApp = React.lazy(() => import("teamApp/App"));
+const TeamApp = React.lazy(() => import("teamApp/App"))
 
 export default function App() {
   return (
@@ -28,5 +28,5 @@ export default function App() {
         </div>
       </div>
     </BrowserRouter>
-  );
+  )
 }

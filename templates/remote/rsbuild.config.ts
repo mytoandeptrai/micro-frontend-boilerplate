@@ -1,6 +1,6 @@
-import { pluginModuleFederation } from "@module-federation/rsbuild-plugin";
-import { defineConfig } from "@rsbuild/core";
-import { pluginReact } from "@rsbuild/plugin-react";
+import { pluginModuleFederation } from "@module-federation/rsbuild-plugin"
+import { defineConfig } from "@rsbuild/core"
+import { pluginReact } from "@rsbuild/plugin-react"
 
 // Replace REPLACE_APP_NAME with the app name (camelCase), e.g. "monitorApp"
 // Replace REPLACE_APP_SLUG with the kebab-case name, e.g. "monitor-app"
@@ -59,4 +59,4 @@ export default defineConfig({
       },
     },
   },
-});
+})

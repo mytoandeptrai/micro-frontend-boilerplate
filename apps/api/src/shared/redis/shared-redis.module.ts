@@ -1,6 +1,6 @@
-import { Global, Module } from '@nestjs/common';
-import { RedisModule } from '@liaoliaots/nestjs-redis';
-import { RedisConfigService } from './redis-config.service';
+import { Global, Module } from "@nestjs/common"
+import { RedisModule } from "@liaoliaots/nestjs-redis"
+import { RedisConfigService } from "./redis-config.service"
 
 @Global()
 @Module({

@@ -1,4 +1,4 @@
-import type { Config } from "jest";
+import type { Config } from "jest"
 
 const config: Config = {
   testEnvironment: "jsdom",
@@ -26,6 +26,6 @@ const config: Config = {
   },
   setupFilesAfterEnv: ["@testing-library/jest-dom"],
   testMatch: ["**/*.test.tsx", "**/*.test.ts"],
-};
+}
 
-export default config;
+export default config
