@@ -1,3 +1,4 @@
+import * as bcrypt from "bcryptjs"
 import { DataSource } from "typeorm"
 import {
   Member,
@@ -7,11 +8,7 @@ import {
 
 export async function seedMembers(dataSource: DataSource): Promise<void> {
   const repo = dataSource.getRepository(Member)
-  const count = await repo.count()
-  if (count > 0) {
-    console.log(`Members already seeded (${count} rows). Skipping.`)
-    return
-  }
+  const password = bcrypt.hashSync("password123", 10)
 
   const members: Partial<Member>[] = [
     {
@@ -20,6 +17,7 @@ export async function seedMembers(dataSource: DataSource): Promise<void> {
       role: MemberRole.ADMIN,
       status: MemberStatus.ACTIVE,
       avatar: "https://i.pravatar.cc/150?u=alice",
+      password,
     },
     {
       name: "Bob Smith",
@@ -27,6 +25,7 @@ export async function seedMembers(dataSource: DataSource): Promise<void> {
       role: MemberRole.MEMBER,
       status: MemberStatus.ACTIVE,
       avatar: "https://i.pravatar.cc/150?u=bob",
+      password,
     },
     {
       name: "Carol White",
@@ -34,6 +33,7 @@ export async function seedMembers(dataSource: DataSource): Promise<void> {
       role: MemberRole.VIEWER,
       status: MemberStatus.ACTIVE,
       avatar: "https://i.pravatar.cc/150?u=carol",
+      password,
     },
     {
       name: "David Kim",
@@ -41,6 +41,7 @@ export async function seedMembers(dataSource: DataSource): Promise<void> {
       role: MemberRole.MEMBER,
       status: MemberStatus.ACTIVE,
       avatar: "https://i.pravatar.cc/150?u=david",
+      password,
     },
     {
       name: "Eva Martinez",
@@ -48,6 +49,7 @@ export async function seedMembers(dataSource: DataSource): Promise<void> {
       role: MemberRole.ADMIN,
       status: MemberStatus.ACTIVE,
       avatar: "https://i.pravatar.cc/150?u=eva",
+      password,
     },
     {
       name: "Frank Chen",
@@ -55,6 +57,7 @@ export async function seedMembers(dataSource: DataSource): Promise<void> {
       role: MemberRole.MEMBER,
       status: MemberStatus.INACTIVE,
       avatar: "https://i.pravatar.cc/150?u=frank",
+      password,
     },
     {
       name: "Grace Lee",
@@ -62,6 +65,7 @@ export async function seedMembers(dataSource: DataSource): Promise<void> {
       role: MemberRole.VIEWER,
       status: MemberStatus.ACTIVE,
       avatar: "https://i.pravatar.cc/150?u=grace",
+      password,
     },
     {
       name: "Henry Brown",
@@ -69,6 +73,7 @@ export async function seedMembers(dataSource: DataSource): Promise<void> {
       role: MemberRole.MEMBER,
       status: MemberStatus.ACTIVE,
       avatar: "https://i.pravatar.cc/150?u=henry",
+      password,
     },
     {
       name: "Iris Nguyen",
@@ -76,6 +81,7 @@ export async function seedMembers(dataSource: DataSource): Promise<void> {
       role: MemberRole.VIEWER,
       status: MemberStatus.INACTIVE,
       avatar: "https://i.pravatar.cc/150?u=iris",
+      password,
     },
     {
       name: "Jack Wilson",
@@ -83,6 +89,7 @@ export async function seedMembers(dataSource: DataSource): Promise<void> {
       role: MemberRole.MEMBER,
       status: MemberStatus.ACTIVE,
       avatar: "https://i.pravatar.cc/150?u=jack",
+      password,
     },
     {
       name: "Karen Davis",
@@ -90,6 +97,7 @@ export async function seedMembers(dataSource: DataSource): Promise<void> {
       role: MemberRole.ADMIN,
       status: MemberStatus.ACTIVE,
       avatar: "https://i.pravatar.cc/150?u=karen",
+      password,
     },
     {
       name: "Leo Garcia",
@@ -97,6 +105,7 @@ export async function seedMembers(dataSource: DataSource): Promise<void> {
       role: MemberRole.VIEWER,
       status: MemberStatus.ACTIVE,
       avatar: "https://i.pravatar.cc/150?u=leo",
+      password,
     },
     {
       name: "Mia Taylor",
@@ -104,9 +113,10 @@ export async function seedMembers(dataSource: DataSource): Promise<void> {
       role: MemberRole.MEMBER,
       status: MemberStatus.INACTIVE,
       avatar: "https://i.pravatar.cc/150?u=mia",
+      password,
     },
   ]
 
-  await repo.save(members.map((m) => repo.create(m)))
-  console.log(`Seeded ${members.length} members.`)
+  await repo.upsert(members.map((m) => repo.create(m)), { conflictPaths: ["email"], skipUpdateIfNoValuesChanged: false })
+  console.log(`Upserted ${members.length} members.`)
 }

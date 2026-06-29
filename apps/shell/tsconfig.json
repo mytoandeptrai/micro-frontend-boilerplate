@@ -3,6 +3,8 @@
   "compilerOptions": {
     "noEmit": true,
     "paths": {
+      "@ops/shared/*": ["../../packages/shared/src/*"],
+      "@ops/shared-utils/*": ["../../packages/shared-utils/src/*"],
       "@ops/ui/*": ["../../packages/ui/src/*"]
     }
   },

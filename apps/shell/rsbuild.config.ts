@@ -2,13 +2,19 @@ import { pluginModuleFederation } from "@module-federation/rsbuild-plugin"
 import { defineConfig } from "@rsbuild/core"
 import { pluginReact } from "@rsbuild/plugin-react"
 
+const TEAM_APP_URL = process.env.TEAM_APP_URL || "http://localhost:3001"
+const API_URL = process.env.API_URL || "http://localhost:4000"
+
 export default defineConfig({
   plugins: [
     pluginReact(),
     pluginModuleFederation({
       name: "shell",
+      exposes: {
+        "./store": "@ops/shared/store",
+      },
       remotes: {
-        teamApp: "teamApp@http://localhost:3001/mf-manifest.json",
+        teamApp: `teamApp@${TEAM_APP_URL}/mf-manifest.json`,
       },
       shared: {
         react: { singleton: true, eager: true },
@@ -19,6 +25,7 @@ export default defineConfig({
       },
       dts: {
         consumeTypes: true,
+        generateTypes: false,
       },
     }),
   ],
@@ -38,7 +45,7 @@ export default defineConfig({
     historyApiFallback: true,
     proxy: {
       "/api": {
-        target: "http://localhost:4000",
+        target: API_URL,
         changeOrigin: true,
       },
     },

@@ -9,6 +9,7 @@ import { AppController } from "@/app.controller"
 import { AppService } from "@/app.service"
 import databaseConfig from "@/config/database.config"
 import redisConfig from "@/config/redis.config"
+import { AuthModule } from "@/modules/auth/auth.module"
 import { MembersModule } from "@/modules/members/members.module"
 import { UsersModule } from "@/modules/users/users.module"
 import { CachingModule } from "@/shared/caching/caching.module"
@@ -55,6 +56,7 @@ import { SharedRedisModule } from "@/shared/redis/shared-redis.module"
     // Features Modules
     UsersModule,
     MembersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

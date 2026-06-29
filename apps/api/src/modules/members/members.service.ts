@@ -56,6 +56,10 @@ export class MembersService {
     return member
   }
 
+  async findByEmail(email: string): Promise<Member | null> {
+    return this.repo.findOne({ where: { email }, select: { id: true, email: true, name: true, role: true, avatar: true, status: true, createdAt: true, updatedAt: true, password: true } })
+  }
+
   async create(dto: CreateMemberDto): Promise<Member> {
     const existing = await this.repo.findOne({ where: { email: dto.email } })
     if (existing) throw new ConflictException("Email already in use")

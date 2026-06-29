@@ -2,12 +2,19 @@ import { pluginModuleFederation } from "@module-federation/rsbuild-plugin"
 import { defineConfig } from "@rsbuild/core"
 import { pluginReact } from "@rsbuild/plugin-react"
 
+const SHELL_URL = process.env.SHELL_URL || "http://localhost:3000"
+const TEAM_APP_URL = process.env.TEAM_APP_URL || "http://localhost:3001"
+const API_URL = process.env.API_URL || "http://localhost:4000"
+
 export default defineConfig({
   plugins: [
     pluginReact(),
     pluginModuleFederation({
       name: "teamApp",
       filename: "remoteEntry.js",
+      remotes: {
+        shell: `shell@${SHELL_URL}/mf-manifest.json`,
+      },
       exposes: {
         "./App": "./src/App",
       },
@@ -26,7 +33,7 @@ export default defineConfig({
     }),
   ],
   output: {
-    assetPrefix: "auto",
+    assetPrefix: TEAM_APP_URL,
   },
   html: {
     template: "./public/index.html",
@@ -43,7 +50,7 @@ export default defineConfig({
     },
     proxy: {
       "/api": {
-        target: "http://localhost:4000",
+        target: API_URL,
         changeOrigin: true,
       },
     },

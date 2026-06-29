@@ -31,6 +31,9 @@ export class Member {
   @Column({ type: "enum", enum: MemberRole })
   role: MemberRole
 
+  @Column({ select: false, nullable: true })
+  password: string | null
+
   @Column({ nullable: true })
   avatar: string
 

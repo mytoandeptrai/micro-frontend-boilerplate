@@ -15,8 +15,10 @@ import {
   TableRow,
 } from "@ops/ui/components/table"
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs"
-import React from "react"
+import type React from "react"
 import { useNavigate } from "react-router-dom"
+import { useStore } from "shell/store"
+import { useDeleteMember } from "../hooks/useMemberMutations"
 import { useMembers } from "../hooks/useMembers"
 import type { MemberRole, MemberStatus } from "../types"
 
@@ -33,6 +35,10 @@ const statusOptions: { value: MemberStatus; label: string }[] = [
 
 export default function MemberList() {
   const navigate = useNavigate()
+  const user = useStore.use.user()
+  const role = user?.role
+  const deleteMutation = useDeleteMember()
+
   const [params, setParams] = useQueryStates({
     page: parseAsInteger.withDefault(1),
     name: parseAsString.withDefault(""),
@@ -50,52 +56,68 @@ export default function MemberList() {
   const members = data?.data ?? []
   const meta = data?.meta
 
+  function handleDelete(e: React.MouseEvent, id: string) {
+    e.stopPropagation()
+    if (confirm("Delete this member?")) deleteMutation.mutate(id)
+  }
+
   return (
     <div className="p-6 space-y-4">
-      <div className="flex items-center gap-3">
-        <input
-          type="text"
-          placeholder="Search name..."
-          value={params.name}
-          onChange={(e) => setParams({ name: e.target.value, page: 1 })}
-          className="h-8 border border-border bg-background px-3 text-sm focus:outline-none focus:border-ring"
-        />
-        <Select
-          value={params.role || "all"}
-          onValueChange={(v) =>
-            setParams({ role: v === "all" ? "" : v, page: 1 })
-          }
-        >
-          <SelectTrigger className="w-32 h-8">
-            <SelectValue placeholder="Role" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All roles</SelectItem>
-            {roleOptions.map((o) => (
-              <SelectItem key={o.value} value={o.value}>
-                {o.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select
-          value={params.status || "all"}
-          onValueChange={(v) =>
-            setParams({ status: v === "all" ? "" : v, page: 1 })
-          }
-        >
-          <SelectTrigger className="w-32 h-8">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All statuses</SelectItem>
-            {statusOptions.map((o) => (
-              <SelectItem key={o.value} value={o.value}>
-                {o.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <input
+            type="text"
+            placeholder="Search name..."
+            value={params.name}
+            onChange={(e) => setParams({ name: e.target.value, page: 1 })}
+            className="h-8 border border-border bg-background px-3 text-sm focus:outline-none focus:border-ring"
+          />
+          <Select
+            value={params.role || "all"}
+            onValueChange={(v) =>
+              setParams({ role: v === "all" ? "" : v, page: 1 })
+            }
+          >
+            <SelectTrigger className="w-32 h-8">
+              <SelectValue placeholder="Role" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All roles</SelectItem>
+              {roleOptions.map((o) => (
+                <SelectItem key={o.value} value={o.value}>
+                  {o.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select
+            value={params.status || "all"}
+            onValueChange={(v) =>
+              setParams({ status: v === "all" ? "" : v, page: 1 })
+            }
+          >
+            <SelectTrigger className="w-32 h-8">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All statuses</SelectItem>
+              {statusOptions.map((o) => (
+                <SelectItem key={o.value} value={o.value}>
+                  {o.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        {role === "admin" && (
+          <button
+            type="button"
+            onClick={() => navigate("/team/create")}
+            className="h-8 px-4 bg-primary text-primary-foreground text-sm rounded-md hover:bg-primary/90"
+          >
+            Create Member
+          </button>
+        )}
       </div>
 
       {isLoading ? (
@@ -110,6 +132,7 @@ export default function MemberList() {
               <TableHead>Role</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Created</TableHead>
+              {role !== "viewer" && <TableHead />}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -137,8 +160,7 @@ export default function MemberList() {
                   {m.email}
                 </TableCell>
                 <TableCell>
-                  <Badge variant={m.role === "admin" ? "default" : "outline"}
-                  >
+                  <Badge variant={m.role === "admin" ? "default" : "outline"}>
                     {m.role}
                   </Badge>
                 </TableCell>
@@ -152,12 +174,37 @@ export default function MemberList() {
                 <TableCell className="text-muted-foreground text-xs">
                   {new Date(m.createdAt).toLocaleDateString()}
                 </TableCell>
+                {role !== "viewer" && (
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        aria-label="Edit"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          navigate(`/team/${m.id}`)
+                        }}
+                        className="text-xs text-muted-foreground hover:text-foreground"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        aria-label="Delete"
+                        onClick={(e) => handleDelete(e, m.id)}
+                        className="text-xs text-destructive hover:text-destructive/80"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
             {members.length === 0 && (
               <TableRow>
                 <TableCell
-                  colSpan={6}
+                  colSpan={role !== "viewer" ? 7 : 6}
                   className="text-center text-muted-foreground py-8"
                 >
                   No members found
@@ -171,6 +218,7 @@ export default function MemberList() {
       {meta && meta.totalPages > 1 && (
         <div className="flex items-center gap-3 text-sm">
           <button
+            type="button"
             disabled={params.page <= 1}
             onClick={() => setParams({ page: params.page - 1 })}
             className="px-3 h-8 border border-border disabled:opacity-40 hover:bg-muted"
@@ -181,6 +229,7 @@ export default function MemberList() {
             Page {meta.page} of {meta.totalPages} ({meta.total} total)
           </span>
           <button
+            type="button"
             disabled={params.page >= meta.totalPages}
             onClick={() => setParams({ page: params.page + 1 })}
             className="px-3 h-8 border border-border disabled:opacity-40 hover:bg-muted"

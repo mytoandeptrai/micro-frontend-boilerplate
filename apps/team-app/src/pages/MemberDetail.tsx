@@ -17,12 +17,13 @@ import {
   SelectValue,
 } from "@ops/ui/components/select"
 import { zodResolver } from "@hookform/resolvers/zod"
-import React, { useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate, useParams } from "react-router-dom"
+import { useStore } from "shell/store"
 import { z } from "zod"
 import { useMember } from "../hooks/useMember"
-import { useUpdateMember } from "../hooks/useMemberMutations"
+import { useDeleteMember, useUpdateMember } from "../hooks/useMemberMutations"
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -36,9 +37,18 @@ type FormValues = z.infer<typeof schema>
 export default function MemberDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const user = useStore.use.user()
+  const viewerRole = user?.role === "viewer"
   const { data: member, isLoading } = useMember(id)
   const updateMutation = useUpdateMember(id!)
+  const deleteMutation = useDeleteMember()
   const [isEditing, setIsEditing] = useState(false)
+
+  async function handleDelete() {
+    if (!id || !confirm("Delete this member?")) return
+    await deleteMutation.mutateAsync(id)
+    navigate("/team")
+  }
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -194,7 +204,21 @@ export default function MemberDetail() {
           <div className="text-xs text-muted-foreground">
             Created: {new Date(member.createdAt).toLocaleString()}
           </div>
-          <Button onClick={() => setIsEditing(true)}>Edit</Button>
+          <div className="flex gap-2">
+            {!viewerRole && (
+              <Button onClick={() => setIsEditing(true)}>Edit</Button>
+            )}
+            {!viewerRole && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleDelete}
+                disabled={deleteMutation.isPending}
+              >
+                {deleteMutation.isPending ? "Deleting…" : "Delete"}
+              </Button>
+            )}
+          </div>
         </div>
       )}
     </div>

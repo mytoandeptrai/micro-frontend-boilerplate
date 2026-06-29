@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import React from "react"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
+import { useStore } from "shell/store"
 import * as useMemberHook from "../hooks/useMember"
 import * as mutations from "../hooks/useMemberMutations"
 import MemberDetail from "./MemberDetail"
@@ -10,6 +10,7 @@ import MemberDetail from "./MemberDetail"
 jest.mock("../hooks/useMember")
 jest.mock("../hooks/useMemberMutations")
 jest.mock("sonner", () => ({ toast: { success: jest.fn(), error: jest.fn() } }))
+jest.mock("shell/store")
 
 const mockMember = {
   id: "uuid-1",
@@ -27,13 +28,17 @@ const mockUpdateMutation = {
   isPending: false,
 }
 
+const mockDeleteMutation = {
+  mutateAsync: jest.fn().mockResolvedValue(mockMember),
+  isPending: false,
+}
+
 function renderDetail(id = "uuid-1") {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } })
-  ;(useMemberHook.useMember as jest.Mock).mockReturnValue({
-    data: mockMember,
-    isLoading: false,
-  })
+  ;(useStore.use.user as jest.Mock).mockReturnValue({ role: "admin" })
+  ;(useMemberHook.useMember as jest.Mock).mockReturnValue({ data: mockMember, isLoading: false })
   ;(mutations.useUpdateMember as jest.Mock).mockReturnValue(mockUpdateMutation)
+  ;(mutations.useDeleteMember as jest.Mock).mockReturnValue(mockDeleteMutation)
 
   return render(
     <QueryClientProvider client={qc}>

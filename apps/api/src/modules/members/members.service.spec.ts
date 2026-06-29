@@ -10,6 +10,7 @@ const mockMember = (overrides: Partial<Member> = {}): Member => ({
   name: "Alice",
   email: "alice@ops.dev",
   role: MemberRole.ADMIN,
+  password: "",
   avatar: null,
   status: MemberStatus.ACTIVE,
   createdAt: new Date(),

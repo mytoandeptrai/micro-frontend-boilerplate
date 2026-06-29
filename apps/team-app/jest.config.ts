@@ -23,6 +23,7 @@ const config: Config = {
     "^@ops/shared-utils/(.*)$": "<rootDir>/../../packages/shared-utils/src/$1",
     "^nuqs$": "<rootDir>/src/__mocks__/nuqs.ts",
     "^nuqs/(.*)$": "<rootDir>/src/__mocks__/nuqs.ts",
+    "^shell/store$": "<rootDir>/src/__mocks__/shellStore.ts",
   },
   setupFilesAfterEnv: ["@testing-library/jest-dom"],
   testMatch: ["**/*.test.tsx", "**/*.test.ts"],
