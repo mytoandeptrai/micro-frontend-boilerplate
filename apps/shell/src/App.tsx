@@ -1,4 +1,5 @@
 import React, { Suspense } from "react"
+import { EventDebugger } from "@ops/ui/devtools"
 import { BrowserRouter, Navigate, Outlet, type RouteObject, useRoutes } from "react-router-dom"
 import GuestRoute from "./components/GuestRoute"
 import ProtectedRoute from "./components/ProtectedRoute"
@@ -6,10 +7,10 @@ import Header from "./layout/Header"
 import Sidebar from "./layout/Sidebar"
 import DashboardPage from "./pages/DashboardPage"
 import LoginPage from "./pages/LoginPage"
-import MonitorPage from "./pages/MonitorPage"
 import SettingsPage from "./pages/SettingsPage"
 
 const TeamApp = React.lazy(() => import("teamApp/App"))
+const MonitorApp = React.lazy(() => import("monitorApp/App"))
 
 function AppLayout() {
   return (
@@ -38,7 +39,7 @@ const routes: RouteObject[] = [
     children: [
       { index: true, element: <DashboardPage /> },
       { path: "team/*", element: <TeamApp /> },
-      { path: "monitor", element: <MonitorPage /> },
+      { path: "monitor/*", element: <MonitorApp /> },
       { path: "settings", element: <SettingsPage /> },
     ],
   },
@@ -53,6 +54,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AppRoutes />
+      {import.meta.env.DEV && <EventDebugger />}
     </BrowserRouter>
   )
 }

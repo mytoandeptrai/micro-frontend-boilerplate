@@ -3,3 +3,8 @@ declare module "teamApp/App" {
   const App: React.ComponentType
   export default App
 }
+
+declare module "monitorApp/App" {
+  const App: React.ComponentType
+  export default App
+}
