@@ -1,4 +1,4 @@
-import { useStore } from "@ops/shared/store"
+import { useStore } from "@ops/shared"
 import { type ReactNode, useEffect } from "react"
 import { useMe } from "../hooks/useAuth"
 

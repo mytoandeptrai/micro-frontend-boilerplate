@@ -1,4 +1,4 @@
-import { useStore } from "@ops/shared/store"
+import { useStore } from "@ops/shared"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useLogout } from "../hooks/useAuth"

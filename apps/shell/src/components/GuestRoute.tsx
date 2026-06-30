@@ -1,4 +1,4 @@
-import { useStore } from "@ops/shared/store"
+import { useStore } from "@ops/shared"
 import type { ReactNode } from "react"
 import { Navigate } from "react-router-dom"
 

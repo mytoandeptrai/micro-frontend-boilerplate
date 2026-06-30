@@ -4,7 +4,7 @@ declare module "*.css" {
 }
 
 declare module "shell/store" {
-  import type { GlobalState } from "@ops/shared/store"
+  import type { GlobalState } from "@ops/shared"
   import type { StoreApi, UseBoundStore } from "zustand"
 
   type UseStore = UseBoundStore<StoreApi<GlobalState>> & {

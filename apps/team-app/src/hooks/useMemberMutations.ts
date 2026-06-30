@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { publishEvent } from "@ops/shared"
 import http from "@ops/shared-utils/http"
 import type { BaseResponseType } from "@ops/shared-utils/types"
 import { toast } from "sonner"
@@ -34,8 +35,9 @@ export function useCreateMember() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: createMember,
-    onSuccess: () => {
+    onSuccess: (member) => {
       queryClient.invalidateQueries({ queryKey: ["members"] })
+      publishEvent("member:added", { memberId: member.id, sourceInstanceId: "team-app" })
       toast.success("Member created")
     },
     onError: (err: Error) => toast.error(err.message),
@@ -59,8 +61,9 @@ export function useDeleteMember() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: deleteMember,
-    onSuccess: () => {
+    onSuccess: (member) => {
       queryClient.invalidateQueries({ queryKey: ["members"] })
+      publishEvent("member:removed", { memberId: member.id, sourceInstanceId: "team-app" })
       toast.success("Member deleted")
     },
     onError: (err: Error) => toast.error(err.message),

@@ -1,4 +1,4 @@
-import type { Member } from "@ops/shared/types"
+import type { Member } from "@ops/shared"
 import http from "@ops/shared-utils/http"
 import type { BaseResponseType } from "@ops/shared-utils/types"
 

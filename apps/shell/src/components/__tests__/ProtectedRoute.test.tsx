@@ -1,9 +1,9 @@
-import { useStore } from "@ops/shared/store"
+import { useStore } from "@ops/shared"
 import { render, screen } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
 import ProtectedRoute from "../ProtectedRoute"
 
-jest.mock("@ops/shared/store")
+jest.mock("@ops/shared")
 
 function renderInRouter(ui: React.ReactElement, initialEntry = "/") {
   return render(

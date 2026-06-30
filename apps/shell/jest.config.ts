@@ -11,7 +11,7 @@ const config: Config = {
           jsx: "react-jsx",
           types: ["jest", "@testing-library/jest-dom"],
           paths: {
-            "@ops/shared/*": ["../../packages/shared/src/*"],
+            "@ops/shared": ["../../packages/shared/src/index.ts"],
             "@ops/ui/*": ["../../packages/ui/src/*"],
           },
         },
@@ -20,8 +20,7 @@ const config: Config = {
   },
   moduleNameMapper: {
     "\\.(css|scss)$": "<rootDir>/src/__mocks__/fileMock.ts",
-    "^@ops/shared/store$": "<rootDir>/src/__mocks__/sharedStore.ts",
-    "^@ops/shared/(.*)$": "<rootDir>/../../packages/shared/src/$1",
+    "^@ops/shared$": "<rootDir>/src/__mocks__/sharedStore.ts",
     "^@ops/ui/(.*)$": "<rootDir>/../../packages/ui/src/$1",
     "^shell/store$": "<rootDir>/src/__mocks__/shellStore.ts",
   },

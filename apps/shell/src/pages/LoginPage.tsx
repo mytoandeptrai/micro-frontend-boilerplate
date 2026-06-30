@@ -1,4 +1,4 @@
-import { useStore } from "@ops/shared/store"
+import { useStore } from "@ops/shared"
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useLogin } from "../hooks/useAuth"

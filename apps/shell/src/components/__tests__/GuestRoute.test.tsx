@@ -1,9 +1,9 @@
-import { useStore } from "@ops/shared/store"
+import { useStore } from "@ops/shared"
 import { render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import GuestRoute from "../GuestRoute"
 
-jest.mock("@ops/shared/store")
+jest.mock("@ops/shared")
 
 describe("GuestRoute", () => {
   it("redirects to / when authenticated", () => {

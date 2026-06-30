@@ -1,11 +1,11 @@
-import { useStore } from "@ops/shared/store"
+import { useStore } from "@ops/shared"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { MemoryRouter } from "react-router-dom"
 import { useLogout } from "../hooks/useAuth"
 import Header from "./Header"
 
-jest.mock("@ops/shared/store")
+jest.mock("@ops/shared")
 jest.mock("next-themes", () => ({
   useTheme: () => ({ theme: "light", setTheme: jest.fn() }),
 }))

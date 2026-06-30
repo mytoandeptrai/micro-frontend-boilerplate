@@ -4,7 +4,8 @@
     "noEmit": true,
     "paths": {
       "@ops/ui/*": ["../../packages/ui/src/*"],
-      "@ops/shared-utils/*": ["../../packages/shared-utils/src/*"]
+      "@ops/shared-utils/*": ["../../packages/shared-utils/src/*"],
+      "@ops/shared": ["../../packages/shared/src/index.ts"]
     }
   },
   "include": ["src"],
