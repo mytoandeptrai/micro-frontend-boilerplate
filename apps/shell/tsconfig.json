@@ -3,8 +3,7 @@
   "compilerOptions": {
     "noEmit": true,
     "paths": {
-      "@ops/shared": ["../../packages/shared/src/index.ts"],
-      "@ops/shared-utils/*": ["../../packages/shared-utils/src/*"],
+      "@ops/shared-core": ["../../packages/shared-core/src/index.ts"],
       "@ops/ui/*": ["../../packages/ui/src/*"]
     }
   },

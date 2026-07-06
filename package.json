@@ -1,11 +1,11 @@
 {
-  "name": "ops-dashboard",
+  "name": "micro-frontend-template",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "start": "turbo start",
-    "dev": "turbo dev",
+    "start": "turbo start --filter=!@ops/base-app",
+    "dev": "turbo dev --filter=!@ops/base-app",
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check": "biome check --write .",

@@ -1,8 +1,8 @@
-import type { AppEventMap } from "@ops/shared"
+import type { AppEventMap } from "@ops/shared-core"
 import { Badge } from "@ops/ui/components/badge"
 import { cn } from "@ops/ui/lib/utils"
 
-const EVENT_TYPES: (keyof AppEventMap)[] = ["member:added", "member:removed"]
+const EVENT_TYPES: (keyof AppEventMap)[] = ["task:added", "task:completed", "task:removed"]
 
 interface FilterBarProps {
   activeTypes: Set<keyof AppEventMap>

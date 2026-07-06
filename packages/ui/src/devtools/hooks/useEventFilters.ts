@@ -1,5 +1,5 @@
+import type { AppEventMap } from "@ops/shared-core"
 import { useMemo, useState } from "react"
-import type { AppEventMap } from "@ops/shared"
 
 export interface EventLog {
   id: string

@@ -4,19 +4,14 @@ import { ThemeProvider } from "next-themes"
 import React from "react"
 import ReactDOM from "react-dom/client"
 import App from "./App"
-import AuthInitializer from "./components/AuthInitializer"
-import ThemeSync from "./components/ThemeSync"
 
 const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ThemeProvider attribute="class" defaultTheme="dark">
       <QueryClientProvider client={queryClient}>
-        <ThemeSync />
-        <AuthInitializer>
-          <App />
-        </AuthInitializer>
+        <App />
       </QueryClientProvider>
     </ThemeProvider>
   </React.StrictMode>,

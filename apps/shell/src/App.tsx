@@ -1,16 +1,40 @@
-import React, { Suspense } from "react"
 import { EventDebugger } from "@ops/ui/devtools"
-import { BrowserRouter, Navigate, Outlet, type RouteObject, useRoutes } from "react-router-dom"
-import GuestRoute from "./components/GuestRoute"
-import ProtectedRoute from "./components/ProtectedRoute"
+import React, { Suspense } from "react"
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom"
+import NameModal from "./components/NameModal"
 import Header from "./layout/Header"
 import Sidebar from "./layout/Sidebar"
-import DashboardPage from "./pages/DashboardPage"
-import LoginPage from "./pages/LoginPage"
+import WelcomePage from "./pages/WelcomePage"
 
-const TeamApp = React.lazy(() => import("teamApp/App"))
-const MonitorApp = React.lazy(() => import("monitorApp/App"))
-const SettingsApp = React.lazy(() => import("settingsApp/App"))
+const FirstApp = React.lazy(() => import("firstApp/App"))
+const SecondApp = React.lazy(() => import("secondApp/App"))
+
+// FirstApp and SecondApp stay mounted once visited (hidden via CSS instead of
+// unmounted by the router) so their useEventSubscription listeners keep receiving
+// task events fired from the other app, even while not the active route.
+function RemoteOutlet() {
+  const location = useLocation()
+  const isTasks = location.pathname.startsWith("/tasks")
+  const isStats = location.pathname.startsWith("/stats")
+
+  return (
+    <>
+      {location.pathname === "/" && <WelcomePage />}
+      <div hidden={!isTasks}>
+        <FirstApp />
+      </div>
+      <div hidden={!isStats}>
+        <SecondApp />
+      </div>
+    </>
+  )
+}
 
 function AppLayout() {
   return (
@@ -20,7 +44,7 @@ function AppLayout() {
         <Sidebar />
         <main className="flex-1 overflow-auto">
           <Suspense fallback={<div className="p-6">Loading…</div>}>
-            <Outlet />
+            <RemoteOutlet />
           </Suspense>
         </main>
       </div>
@@ -28,32 +52,16 @@ function AppLayout() {
   )
 }
 
-const routes: RouteObject[] = [
-  {
-    path: "login",
-    element: <GuestRoute><LoginPage /></GuestRoute>,
-  },
-  {
-    path: "/",
-    element: <ProtectedRoute><AppLayout /></ProtectedRoute>,
-    children: [
-      { index: true, element: <DashboardPage /> },
-      { path: "team/*", element: <TeamApp /> },
-      { path: "monitor/*", element: <MonitorApp /> },
-      { path: "settings/*", element: <SettingsApp /> },
-    ],
-  },
-  { path: "*", element: <Navigate to="/" replace /> },
-]
-
-function AppRoutes() {
-  return useRoutes(routes)
-}
-
 export default function App() {
   return (
     <BrowserRouter>
-      <AppRoutes />
+      <NameModal />
+      <Routes>
+        <Route path="/" element={<AppLayout />} />
+        <Route path="/tasks/*" element={<AppLayout />} />
+        <Route path="/stats/*" element={<AppLayout />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
       {import.meta.env.DEV && <EventDebugger />}
     </BrowserRouter>
   )

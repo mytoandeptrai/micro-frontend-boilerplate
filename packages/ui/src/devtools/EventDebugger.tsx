@@ -1,4 +1,4 @@
-import { type AppEventMap, subscribeEvent } from "@ops/shared"
+import { type AppEventMap, subscribeEvent } from "@ops/shared-core"
 import { useCallback, useEffect, useState } from "react"
 import { Sheet, SheetContent, SheetHeader } from "../components/sheet"
 import { EventDebuggerHeader } from "./components/EventDebuggerHeader"
@@ -8,7 +8,7 @@ import { FilterBar } from "./components/FilterBar"
 import { SearchBar } from "./components/SearchBar"
 import { type EventLog, useEventFilters } from "./hooks/useEventFilters"
 
-const EVENT_TYPES: (keyof AppEventMap)[] = ["member:added", "member:removed"]
+const EVENT_TYPES: (keyof AppEventMap)[] = ["task:added", "task:completed", "task:removed"]
 const MAX_LOGS = 100
 
 export function EventDebugger() {

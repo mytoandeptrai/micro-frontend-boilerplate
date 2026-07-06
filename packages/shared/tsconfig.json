@@ -1,8 +1,0 @@
-{
-  "extends": "@ops/shared-config/tsconfig.frontend.json",
-  "compilerOptions": {
-    "noEmit": true
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
-}

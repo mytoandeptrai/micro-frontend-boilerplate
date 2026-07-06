@@ -5,8 +5,8 @@ import { useState } from "react"
 import type { EventLog } from "../hooks/useEventFilters"
 
 const BADGE_VARIANTS: Record<string, "default" | "destructive" | "outline"> = {
-  "member:added": "default",
-  "member:removed": "destructive",
+  "task:added": "default",
+  "task:removed": "destructive",
 }
 
 interface EventItemProps {
