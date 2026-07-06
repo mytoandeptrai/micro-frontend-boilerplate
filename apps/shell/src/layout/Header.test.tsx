@@ -6,9 +6,6 @@ import { useLogout } from "../hooks/useAuth"
 import Header from "./Header"
 
 jest.mock("@ops/shared")
-jest.mock("next-themes", () => ({
-  useTheme: () => ({ theme: "light", setTheme: jest.fn() }),
-}))
 jest.mock("../hooks/useAuth")
 
 function renderHeader() {
@@ -28,11 +25,6 @@ describe("Header", () => {
   it("renders app title", () => {
     renderHeader()
     expect(screen.getByText("Ops Dashboard")).toBeInTheDocument()
-  })
-
-  it("renders theme toggle button", () => {
-    renderHeader()
-    expect(screen.getByRole("button", { name: "Toggle theme" })).toBeInTheDocument()
   })
 
   it("renders user name from store", () => {

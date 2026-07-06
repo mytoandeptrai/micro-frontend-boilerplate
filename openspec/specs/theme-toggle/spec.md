@@ -13,31 +13,38 @@ Shell `bootstrap.tsx` SHALL wrap app với `ThemeProvider` từ `next-themes` v�
 - **WHEN** render shell app
 - **THEN** `ThemeProvider` là ancestor của mọi component trong app
 
-### Requirement: Header có theme toggle button
-`Header.tsx` SHALL có button để toggle giữa `light` và `dark` theme. Button SHALL hiển thị icon tương ứng với theme hiện tại (ví dụ: sun icon cho light, moon icon cho dark).
+### Requirement: Theme persist qua page refresh, ưu tiên giá trị từ backend
+`next-themes` vẫn tự động lưu theme preference vào `localStorage`. Tuy nhiên khi shell khởi động, `GET /api/v1/settings` SHALL là nguồn sự thật cho theme ban đầu — giá trị `theme` từ API SHALL ghi đè giá trị `next-themes` đọc được từ `localStorage` nếu 2 giá trị khác nhau.
 
-#### Scenario: Toggle button hiển thị trong Header
-- **WHEN** render `<Header />`
-- **THEN** có button/element với role hoặc aria-label liên quan đến theme toggle
+#### Scenario: Theme từ API ghi đè localStorage khi khởi động
+- **WHEN** `localStorage` có theme `'light'` nhưng `GET /api/v1/settings` trả về `theme: 'dark'`
+- **THEN** sau khi shell mount xong, class `dark` được áp dụng trên `<html>` (theo giá trị từ API, không phải localStorage)
 
-#### Scenario: Click toggle đổi theme
-- **WHEN** user click theme toggle button khi đang ở light mode
-- **THEN** class `dark` được thêm vào `<html>` element, shadcn CSS variables chuyển sang dark values
+#### Scenario: Theme persist sau refresh khi đổi qua settings-app
+- **WHEN** user đổi theme thành `dark` ở `/settings` (đã PATCH thành công xuống DB), sau đó refresh trang
+- **THEN** dark mode vẫn active sau khi `GET /api/v1/settings` load xong
 
-#### Scenario: Click lại đổi về light
-- **WHEN** user click theme toggle button khi đang ở dark mode
-- **THEN** class `dark` bị remove khỏi `<html>` element
+### Requirement: E2E verify theme persist và cross-app đồng bộ
+Playwright SHALL test: đổi theme ở `/settings` → verify `Header`/`team-app`/`monitor-app` đổi theme ngay lập tức (cùng DOM) → refresh page → verify theme được khôi phục từ API, không bị reset về giá trị cũ.
 
-### Requirement: Theme persist qua page refresh
-`next-themes` SHALL tự động lưu theme preference vào localStorage. Khi user refresh trang, theme trước đó SHALL được khôi phục.
+#### Scenario: E2E theme thay đổi cross-app
+- **WHEN** Playwright đổi theme sang `dark` tại `/settings`
+- **THEN** class `dark` xuất hiện trên `<html>` VÀ nội dung `/team`, `/monitor` cũng hiển thị dark mode styling (không cần reload)
 
-#### Scenario: Theme persist sau refresh
-- **WHEN** user chọn dark mode, sau đó refresh trang
-- **THEN** dark mode vẫn active (class `dark` trên `<html>`, localStorage có theme value)
+#### Scenario: E2E theme persistence sau reload
+- **WHEN** Playwright đổi theme sang `dark` tại `/settings` và reload page
+- **THEN** page vẫn render với dark mode active sau reload, giá trị được load từ `GET /api/v1/settings`
 
-### Requirement: E2E verify theme persist
-Playwright SHALL test: toggle theme → refresh → verify theme được khôi phục.
+### Requirement: Shell subscribe theme:change và áp dụng qua next-themes
+`shell/bootstrap.tsx` (bên trong `ThemeProvider`) SHALL subscribe event `'theme:change'` qua `subscribeEvent`/`useEventSubscription` từ `@ops/shared`. Khi nhận event, SHALL gọi `setTheme(theme)` từ `next-themes`. Đây là nơi DUY NHẤT trong toàn hệ thống gọi `next-themes` `setTheme` để phản hồi cross-app event.
 
-#### Scenario: E2E theme persistence
-- **WHEN** Playwright toggle sang dark mode và reload page
-- **THEN** page vẫn render với dark mode active sau reload
+#### Scenario: Shell nhận theme:change từ settings-app và áp dụng
+- **WHEN** `settings-app` gọi `publishEvent('theme:change', { theme: 'dark' })`
+- **THEN** shell nhận event và gọi `setTheme('dark')`, class `dark` được thêm vào `<html>`
+
+### Requirement: Shell load theme ban đầu từ GET /api/v1/settings khi khởi động
+Shell SHALL gọi `GET /api/v1/settings` một lần khi app mount (song song hoặc ngay sau `AuthInitializer`), sau đó gọi `setTheme(settings.theme)` từ `next-themes` với giá trị nhận được.
+
+#### Scenario: Shell áp dụng theme từ API khi mount
+- **WHEN** shell mount và `GET /api/v1/settings` trả về `{ theme: 'dark', ... }`
+- **THEN** `setTheme('dark')` được gọi, `<html>` có class `dark`

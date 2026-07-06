@@ -12,6 +12,7 @@ import redisConfig from "@/config/redis.config"
 import { ActivityModule } from "@/modules/activity/activity.module"
 import { AuthModule } from "@/modules/auth/auth.module"
 import { MembersModule } from "@/modules/members/members.module"
+import { SettingsModule } from "@/modules/settings/settings.module"
 import { StatsModule } from "@/modules/stats/stats.module"
 import { UsersModule } from "@/modules/users/users.module"
 import { CachingModule } from "@/shared/caching/caching.module"
@@ -60,6 +61,7 @@ import { SharedRedisModule } from "@/shared/redis/shared-redis.module"
     MembersModule,
     ActivityModule,
     StatsModule,
+    SettingsModule,
     AuthModule,
   ],
   controllers: [AppController],

@@ -7,10 +7,10 @@ import Header from "./layout/Header"
 import Sidebar from "./layout/Sidebar"
 import DashboardPage from "./pages/DashboardPage"
 import LoginPage from "./pages/LoginPage"
-import SettingsPage from "./pages/SettingsPage"
 
 const TeamApp = React.lazy(() => import("teamApp/App"))
 const MonitorApp = React.lazy(() => import("monitorApp/App"))
+const SettingsApp = React.lazy(() => import("settingsApp/App"))
 
 function AppLayout() {
   return (
@@ -40,7 +40,7 @@ const routes: RouteObject[] = [
       { index: true, element: <DashboardPage /> },
       { path: "team/*", element: <TeamApp /> },
       { path: "monitor/*", element: <MonitorApp /> },
-      { path: "settings", element: <SettingsPage /> },
+      { path: "settings/*", element: <SettingsApp /> },
     ],
   },
   { path: "*", element: <Navigate to="/" replace /> },

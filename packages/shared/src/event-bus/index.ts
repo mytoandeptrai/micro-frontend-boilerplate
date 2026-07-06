@@ -1,6 +1,7 @@
 export interface AppEventMap {
   "member:added": { memberId: string; sourceInstanceId: string }
   "member:removed": { memberId: string; sourceInstanceId: string }
+  "theme:change": { theme: "light" | "dark" }
 }
 
 export const publishEvent = <K extends keyof AppEventMap>(

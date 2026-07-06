@@ -1,5 +1,6 @@
 import dataSource from "../data-source"
 import { seedMembers } from "./member.seed"
+import { seedSettings } from "./settings.seed"
 import { seedStats } from "./stats.seed"
 
 async function runSeed() {
@@ -8,6 +9,7 @@ async function runSeed() {
 
   await seedMembers(dataSource)
   await seedStats(dataSource)
+  await seedSettings(dataSource)
 
   console.log("Seeding complete.")
   await dataSource.destroy()

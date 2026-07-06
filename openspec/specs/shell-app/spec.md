@@ -49,7 +49,7 @@ Shell SHALL define các routes sau trong một `RouteObject[]` array:
   - index → `<DashboardPage />`
   - `team/*` → `<TeamApp />` (lazy, Remote 1)
   - `monitor/*` → `<MonitorApp />` (lazy, Remote 2)
-  - `settings` → `<SettingsPage />`
+  - `settings/*` → `<SettingsApp />` (lazy, Remote 3)
   - `monitor` → `<MonitorPage />` (local, đã có)
 - `*` → redirect về `/`
 
@@ -95,7 +95,7 @@ Shell SHALL define các routes sau trong một `RouteObject[]` array:
 
 #### Scenario: Route /settings render được sau khi auth
 - **WHEN** truy cập `localhost:3000/settings` sau khi đăng nhập
-- **THEN** Settings placeholder content hiển thị
+- **THEN** `settings-app` remote được lazy load và render (không còn placeholder tĩnh)
 
 ### Requirement: Header component render app title và user placeholder
 `src/layout/Header.tsx` SHALL hiển thị app title "Ops Dashboard" và một user avatar/name placeholder.
@@ -184,6 +184,21 @@ monitorApp: `monitorApp@${MONITOR_APP_URL}/mf-manifest.json`
 #### Scenario: MONITOR_APP_URL override cho production
 - **WHEN** `MONITOR_APP_URL` env var được set
 - **THEN** remote manifest URL sử dụng giá trị đó
+
+### Requirement: Shell config settingsApp remote qua env
+Shell `rsbuild.config.ts` SHALL include `settingsApp` trong `remotes`:
+```
+settingsApp: `settingsApp@${SETTINGS_APP_URL}/mf-manifest.json`
+```
+`SETTINGS_APP_URL` MUST đọc từ environment variable với default `http://localhost:3003`.
+
+#### Scenario: SETTINGS_APP_URL override cho production
+- **WHEN** `SETTINGS_APP_URL` env var được set
+- **THEN** remote manifest URL sử dụng giá trị đó
+
+#### Scenario: Navigate tới /settings load SettingsApp
+- **WHEN** authenticated user navigate tới `/settings`
+- **THEN** `SettingsApp` remote được lazy load và render qua MF
 
 ### Requirement: EventDebugger mount trong DEV mode
 Shell App.tsx SHALL conditionally render `<EventDebugger />` từ `@ops/ui`:
