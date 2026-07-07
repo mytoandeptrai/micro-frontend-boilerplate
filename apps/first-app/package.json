@@ -7,8 +7,7 @@
     "build": "rsbuild build",
     "preview": "rsbuild preview",
     "typecheck": "tsc --noEmit",
-    "test": "jest",
-    "test:e2e": "playwright test"
+    "test": "jest"
   },
   "dependencies": {
     "@ops/shared-core": "workspace:*",
@@ -25,7 +24,6 @@
     "@module-federation/enhanced": "^2.6.0",
     "@module-federation/rsbuild-plugin": "^2.6.0",
     "@ops/shared-config": "workspace:*",
-    "@playwright/test": "^1.61.1",
     "@rsbuild/core": "^1.4.3",
     "@rsbuild/plugin-react": "^1.1.0",
     "@tailwindcss/postcss": "^4.3.1",
