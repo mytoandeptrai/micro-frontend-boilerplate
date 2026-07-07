@@ -62,7 +62,7 @@ export default function App() {
         <Route path="/stats/*" element={<AppLayout />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      {import.meta.env.DEV && <EventDebugger />}
+      {import.meta.env.PUBLIC_SHOW_EVENT_DEBUGGER === "true" && <EventDebugger />}
     </BrowserRouter>
   )
 }
