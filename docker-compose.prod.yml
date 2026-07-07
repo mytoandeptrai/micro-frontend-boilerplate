@@ -1,0 +1,93 @@
+services:
+  shell:
+    build:
+      context: .
+      dockerfile: apps/shell/Dockerfile
+      args:
+        FIRST_APP_URL: ${FIRST_APP_URL}
+        SECOND_APP_URL: ${SECOND_APP_URL}
+        PUBLIC_SHOW_EVENT_DEBUGGER: ${PUBLIC_SHOW_EVENT_DEBUGGER:-false}
+    image: mfe/shell:latest
+    expose:
+      - "8080"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+    networks:
+      - mfe-net
+
+  first-app:
+    build:
+      context: .
+      dockerfile: apps/first-app/Dockerfile
+      args:
+        FIRST_APP_URL: ${FIRST_APP_URL}
+        SHELL_URL: ${SHELL_URL}
+    image: mfe/first-app:latest
+    expose:
+      - "8080"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+    networks:
+      - mfe-net
+
+  second-app:
+    build:
+      context: .
+      dockerfile: apps/second-app/Dockerfile
+      args:
+        SECOND_APP_URL: ${SECOND_APP_URL}
+        SHELL_URL: ${SHELL_URL}
+    image: mfe/second-app:latest
+    expose:
+      - "8080"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+    networks:
+      - mfe-net
+
+  nginx:
+    build:
+      context: ./nginx
+    image: mfe/reverse-proxy:latest
+    ports:
+      - "${HTTP_PORT:-8080}:8080"
+    volumes:
+      - nginx-proxy-cache:/var/cache/nginx/proxy_cache
+    depends_on:
+      shell:
+        condition: service_healthy
+      first-app:
+        condition: service_healthy
+      second-app:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+    networks:
+      - mfe-net
+
+networks:
+  mfe-net:
+    driver: bridge
+
+volumes:
+  nginx-proxy-cache:

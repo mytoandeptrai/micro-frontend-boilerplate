@@ -60,7 +60,7 @@ Each app has its own `.env.local` (already committed for local dev, gitignored v
 | `apps/first-app` | `FIRST_APP_URL` (its own public URL, used for `assetPrefix`), `SHELL_URL` (to resolve `shell/store`) |
 | `apps/second-app` | `SECOND_APP_URL`, `SHELL_URL` |
 
-Changing a URL (e.g. deploying somewhere other than localhost) means updating the relevant `.env.local` or the platform's environment variables — see [`deploy-guide.md`](deploy-guide.md) for the Vercel walkthrough.
+Changing a URL (e.g. deploying somewhere other than localhost) means updating the relevant `.env.local` or the platform's environment variables.
 
 ## Project structure
 
@@ -90,7 +90,27 @@ pnpm test:e2e   # Playwright — only apps/shell owns the E2E suite (spins up al
 pnpm build   # turbo build — outputs dist/ per app (base-app included; it builds fine, just isn't part of the demo)
 ```
 
-Each app deploys as a **separate** static site (they're independent Module Federation remotes/hosts, not one deployable unit). See [`deploy-guide.md`](deploy-guide.md) for the full Vercel setup (3 projects, env vars, CORS/rewrite config).
+Each app deploys as a **separate** static site (they're independent Module Federation remotes/hosts, not one deployable unit).
+
+## Running with Docker
+
+Prefer one self-hosted origin over 3 separate Vercel deployments? `shell`, `first-app`, and
+`second-app` each ship with a production Dockerfile (nginx-based, non-root), fronted by a single
+reverse-proxy Nginx that path-routes `/`, `/first-app/*`, `/second-app/*` — no CORS setup needed
+since everything sits behind one origin.
+
+```bash
+cp .env.example .env
+docker compose -f docker-compose.prod.yml build
+docker compose -f docker-compose.prod.yml up -d
+```
+
+Open [`localhost:8080`](http://localhost:8080) (or whatever `HTTP_PORT` you set in `.env`) — same
+flow as [step 3](#3-open-the-app) above. `base-app` isn't included, same reason as in dev mode.
+
+Note: `FIRST_APP_URL`/`SECOND_APP_URL`/`SHELL_URL`/`PUBLIC_SHOW_EVENT_DEBUGGER` in `.env` are baked
+into the JS bundle at **build time** — changing one means re-running `... build`, not just
+`restart`/`up`.
 
 ## Adding a new remote
 

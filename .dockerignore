@@ -1,0 +1,17 @@
+**/node_modules
+**/dist
+**/.turbo
+**/test-results
+**/playwright-report
+**/e2e
+.git
+.github
+.vscode
+.claude
+.env
+.env.*
+*.md
+design.pen
+*.log
+.DS_Store
+coverage
