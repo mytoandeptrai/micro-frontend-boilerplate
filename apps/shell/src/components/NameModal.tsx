@@ -24,7 +24,7 @@ export default function NameModal() {
 
   return (
     <Dialog open={user === null} onOpenChange={() => {}}>
-      <DialogContent>
+      <DialogContent showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>Welcome to Task Board</DialogTitle>
           <DialogDescription>Enter your name to get started.</DialogDescription>

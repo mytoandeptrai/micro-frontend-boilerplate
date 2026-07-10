@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [base-app]
+  pull_request:
+    branches: [base-app]
+
+env:
+  TURBO_TELEMETRY_DISABLED: "1"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm lint
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm typecheck
+
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm test
+
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [shell, first-app, second-app, base-app]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm --filter "@ops/${{ matrix.app }}" build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.app }}
+          path: apps/${{ matrix.app }}/dist
+          retention-days: 7
