@@ -88,6 +88,7 @@ export default function TaskList() {
             <Checkbox
               checked={task.completed}
               onCheckedChange={() => handleToggle(task.id)}
+              aria-label={task.completed ? `Mark "${task.title}" as not done` : `Mark "${task.title}" as done`}
             />
             <span className={task.completed ? "flex-1 line-through text-muted-foreground" : "flex-1"}>
               {task.title}

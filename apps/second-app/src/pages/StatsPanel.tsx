@@ -50,6 +50,10 @@ export default function StatsPanel() {
     <div className="mx-auto max-w-lg p-6">
       <h1 className="text-2xl font-bold">Stats{user ? ` — ${user.name}` : ""}</h1>
 
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        {`Task stats updated: ${stats.total} in total, ${stats.completed} completed, ${stats.pending} pending`}
+      </div>
+
       <div className="mt-4 grid grid-cols-3 gap-4">
         {cards.map(({ label, value }) => (
           <Card key={label}>

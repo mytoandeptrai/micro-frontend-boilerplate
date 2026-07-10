@@ -1,0 +1,20 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+    branches: [base-app]
+
+env:
+  TURBO_TELEMETRY_DISABLED: "1"
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - uses: treosh/lighthouse-ci-action@v11
+        with:
+          configPath: "./lighthouserc.js"
+          uploadArtifacts: true
+          temporaryPublicStorage: true

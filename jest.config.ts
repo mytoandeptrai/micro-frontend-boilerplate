@@ -6,6 +6,7 @@ const config: Config = {
     "<rootDir>/apps/base-app",
     "<rootDir>/apps/first-app",
     "<rootDir>/apps/second-app",
+    "<rootDir>/packages/ui",
   ],
 }
 

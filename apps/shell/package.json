@@ -26,11 +26,13 @@
     "zustand": "^5.0.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
     "@module-federation/enhanced": "^2.6.0",
     "@module-federation/rsbuild-plugin": "^2.6.0",
     "@ops/shared-config": "workspace:*",
     "@rsbuild/core": "^1.4.3",
     "@rsbuild/plugin-react": "^1.1.0",
+    "@rsdoctor/rspack-plugin": "^1.5.18",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/react": "^19",

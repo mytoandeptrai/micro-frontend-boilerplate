@@ -92,6 +92,18 @@ pnpm build   # turbo build — outputs dist/ per app (base-app included; it buil
 
 Each app deploys as a **separate** static site (they're independent Module Federation remotes/hosts, not one deployable unit).
 
+## Bundle analysis
+
+Want to see what's inside `shell`/`first-app`/`second-app`'s bundle? Two steps:
+
+```bash
+pnpm analyze   # builds all 3 apps with Rsdoctor turned on (writes data to dist/.rsdoctor/, doesn't open anything)
+
+pnpm exec rsdoctor analyze --profile "apps/shell/dist/.rsdoctor/manifest.json"   # opens the report in your browser
+```
+
+Swap `shell` for `first-app`/`second-app` in the second command to view another app's report. A normal `pnpm build` never runs Rsdoctor (only `pnpm analyze` sets the `RSDOCTOR` env var), so it doesn't slow down regular builds. See [docs/bundle-budget.md](docs/bundle-budget.md) for the current baseline sizes.
+
 ## Running with Docker
 
 Prefer one self-hosted origin over 3 separate Vercel deployments? `shell`, `first-app`, and

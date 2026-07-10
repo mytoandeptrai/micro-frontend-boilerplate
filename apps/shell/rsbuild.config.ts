@@ -1,6 +1,7 @@
 import { pluginModuleFederation } from "@module-federation/rsbuild-plugin"
 import { defineConfig } from "@rsbuild/core"
 import { pluginReact } from "@rsbuild/plugin-react"
+import { RsdoctorRspackPlugin } from "@rsdoctor/rspack-plugin"
 
 const FIRST_APP_URL = process.env.FIRST_APP_URL || "http://localhost:3001"
 const SECOND_APP_URL = process.env.SECOND_APP_URL || "http://localhost:3002"
@@ -43,6 +44,13 @@ export default defineConfig({
     historyApiFallback: true,
     headers: {
       "Access-Control-Allow-Origin": "*",
+    },
+  },
+  tools: {
+    rspack(_config, { appendPlugins }) {
+      if (process.env.RSDOCTOR === "true") {
+        appendPlugins(new RsdoctorRspackPlugin({ disableClientServer: true }))
+      }
     },
   },
 })
