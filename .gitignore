@@ -25,3 +25,7 @@ playwright-report/
 
 # Module Federation generated types
 @mf-types/
+deploy-guide.md
+README.docker.md
+.agents/*
+openspec/*
