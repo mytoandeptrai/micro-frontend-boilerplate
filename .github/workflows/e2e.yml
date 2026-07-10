@@ -15,6 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
+      - name: Set up env files
+        run: |
+          cp apps/shell/.env.example apps/shell/.env.local
+          cp apps/first-app/.env.example apps/first-app/.env.local
+          cp apps/second-app/.env.example apps/second-app/.env.local
       - name: Install Playwright browsers
         run: pnpm --filter @ops/shell exec playwright install --with-deps chromium
       - name: Run E2E tests
