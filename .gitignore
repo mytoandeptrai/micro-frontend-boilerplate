@@ -26,6 +26,9 @@ playwright-report/
 # Module Federation generated types
 @mf-types/
 
+# Lighthouse CI
+.lighthouseci/
+
 # Other stuff I don't want to commit
 deploy-guide.md
 README.docker.md
@@ -34,6 +37,5 @@ openspec/*
 devops-optimization.md
 docs/*
 bundle-budget.md
-
-# Lighthouse CI
-.lighthouseci/
+testing-plan.md
+testing-guidelines.md
