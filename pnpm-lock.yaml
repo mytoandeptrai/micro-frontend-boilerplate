@@ -81,6 +81,9 @@ importers:
         specifier: ^5.0.5
         version: 5.0.14(@types/react@19.2.15)(react@19.2.6)
     devDependencies:
+      '@axe-core/playwright':
+        specifier: ^4.12.1
+        version: 4.12.1(playwright-core@1.61.1)
       '@module-federation/enhanced':
         specifier: ^2.6.0
         version: 2.6.0(@rspack/core@2.1.0(@module-federation/runtime-tools@2.6.0(node-fetch@2.7.0(encoding@0.1.13)))(@swc/helpers@0.5.23))(node-fetch@2.7.0(encoding@0.1.13))(typescript@6.0.3)(webpack@5.106.2(@swc/core@1.15.43(@swc/helpers@0.5.23))(postcss@8.5.15))
